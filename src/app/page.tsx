@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CharactersList from "./components/CharactersList";
+import CharactersList from "./components/CharactersList/CharactersList";
 
 export const metadata: Metadata = {
   title: "Star Wars characters",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const MainPage = () => {
   return (
     <div className="flex flex-col p-10 gap-10 h-full">
-      <p className="text-center text-xl">Characters list</p>
+      <h1 className="text-center text-xl">Characters list</h1>
       <CharactersList />
     </div>
   );
