@@ -2,9 +2,9 @@
 
 import { Oval } from "react-loader-spinner";
 import { useInfiniteCharactersFetch } from "@/api/hooks/useInfiniteCharactersFetch";
-import ListCharacter from "./ListCharacter";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import ListCharacter from "../ListCharacter/ListCharacter";
 
 const CharactersList = () => {
   const { data, fetchMore, isLoading } = useInfiniteCharactersFetch();

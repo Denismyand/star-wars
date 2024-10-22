@@ -13,10 +13,10 @@ export type Character = {
   films: number[];
   gender: string;
   hair_color: string;
-  height: number;
+  height: string;
   homeworld: number;
   id: number;
-  mass: number;
+  mass: string;
   name: string;
   skin_color: string;
   species: number[];

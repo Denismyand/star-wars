@@ -28,6 +28,7 @@ export const useInfiniteCharactersFetch = () => {
           results: [...charactersData.results, ...res.data.results],
         });
       })
+      .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
   };
 
