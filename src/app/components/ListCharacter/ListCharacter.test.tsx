@@ -27,7 +27,7 @@ describe("CharactersList", () => {
     await waitFor(() => render(<ListCharacter character={character} />));
   });
   it("ListCharacter component renders", () => {});
-  it("List has all the character characteristics", () => {
+  it("List character has all their characteristics", () => {
     const name = screen.getByText("Name: Obi-Wan Kenobi");
     const height = screen.getByText("Height: 182");
     const mass = screen.getByText("Weight: 77");

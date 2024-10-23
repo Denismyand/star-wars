@@ -1,13 +1,21 @@
 import { FC } from "react";
 import { Character } from "@/api/types";
+import { useRouter } from "next/navigation";
 
 type IListCharacterProps = {
   character: Character;
 };
 
 const ListCharacter: FC<IListCharacterProps> = ({ character }) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/characters/${character.id}`);
+  };
   return (
-    <div className="p-6 border-foreground border-2 rounded-lg">
+    <div
+      className="p-6 border-foreground border-2 rounded-lg cursor-pointer"
+      onClick={handleClick}
+    >
       <p>Name: {character.name}</p>
       <p>Birth year: {character.birth_year}</p>
       <p>Gender: {character.gender}</p>
