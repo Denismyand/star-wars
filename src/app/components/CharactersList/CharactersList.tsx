@@ -13,7 +13,7 @@ const CharactersList = () => {
   useEffect(() => {
     if (!inView || isLoading) return;
     fetchMore({ next: data?.next });
-  }, [inView]);
+  }, [inView, isLoading]);
 
   if (!data?.results.length && isLoading)
     return (

@@ -21,16 +21,18 @@ export const useNodesAndEdges = ({
 
   const handleUpdateNodesAndEdges = () => {
     if (!characterData || !filmsData || !starshipsData) return;
+
     const characterNode = {
       id: `character-${characterData?.id}`,
       data: { label: characterData?.name, output: true },
       position: { x: 0, y: 0 },
       type: "customNode",
     };
+
     const newNodes: Node[] = [];
     const newEdges: Edge[] = [];
 
-    let filmsNodes = (filmsData as Film[]).map((film, i) => ({
+    let filmsNodes = filmsData.map((film, i) => ({
       id: `film-${film.id}`,
       data: { label: film.title, output: true, input: true },
       position: { x: 250 * (-filmsData.length / 2 + i + 0.5), y: 100 },
