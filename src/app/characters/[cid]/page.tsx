@@ -6,10 +6,10 @@ import { redirect, useParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
 import "@xyflow/react/dist/style.css";
 
-import { useNodesAndEdges } from "@/utils/useUpdateNodesAndEdges";
-import CustomNode from "./components/CustomNode";
+import { useNodesAndEdges } from "@/utils/useNodesAndEdges";
 import { useEffect } from "react";
-import CharacterPageHeader from "./components/CharacterPageHeader";
+import CharacterPageHeader from "./components/CharacterPageHeader/CharacterPageHeader";
+import CustomNode from "./components/CustomNode/CustomNode";
 
 const nodeTypes = {
   customNode: CustomNode,
@@ -30,7 +30,7 @@ const CharacterPage = () => {
   useEffect(() => {
     if (isLoading || characterData) return;
     redirect("/");
-  }, [isLoading]);
+  }, [isLoading, characterData]);
 
   if (isLoading || !characterData || !filmsData || !starshipsData)
     return (

@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import ListCharacter from "./ListCharacter";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 const character = {
   id: 10,
@@ -56,7 +57,7 @@ describe("CharactersList", () => {
       `/characters/${character.id}`
     );
 
-    fireEvent.click(characterLink);
+    userEvent.click(characterLink);
 
     expect(characterLink.getAttribute("href")).toBe(
       `/characters/${character.id}`
