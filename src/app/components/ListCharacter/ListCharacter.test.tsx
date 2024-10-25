@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import ListCharacter from "./ListCharacter";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 const character = {
   id: 10,
@@ -44,5 +44,22 @@ describe("CharactersList", () => {
     expect(eyeColor).toBeInTheDocument();
     expect(birthYear).toBeInTheDocument();
     expect(gender).toBeInTheDocument();
+  });
+
+  it("should navigate to the correct character URL when clicked", async () => {
+    render(<ListCharacter character={character} />);
+
+    const characterLink = screen.getAllByRole("link")[0];
+
+    expect(characterLink).toHaveAttribute(
+      "href",
+      `/characters/${character.id}`
+    );
+
+    fireEvent.click(characterLink);
+
+    expect(characterLink.getAttribute("href")).toBe(
+      `/characters/${character.id}`
+    );
   });
 });

@@ -1,20 +1,38 @@
 "use client";
 
 import { useGetGraphData } from "@/api/hooks/useGetGraphData";
-import { useParams, useRouter } from "next/navigation";
+import { NodeTypes, ReactFlow } from "@xyflow/react";
+import { redirect, useParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
+import "@xyflow/react/dist/style.css";
+
+import { useNodesAndEdges } from "@/utils/useUpdateNodesAndEdges";
+import CustomNode from "./components/CustomNode";
+import { useEffect } from "react";
+import CharacterPageHeader from "./components/CharacterPageHeader";
+
+const nodeTypes = {
+  customNode: CustomNode,
+};
 
 const CharacterPage = () => {
   const { cid } = useParams();
   const { characterData, filmsData, starshipsData, isLoading } =
     useGetGraphData(cid as string);
-  const router = useRouter();
 
-  const handleBackClick = () => {
-    router.push(`/`);
-  };
+  const { nodes, edges } = useNodesAndEdges({
+    characterData,
+    filmsData,
+    starshipsData,
+    isLoading,
+  });
 
-  if (isLoading)
+  useEffect(() => {
+    if (isLoading || characterData) return;
+    redirect("/");
+  }, [isLoading]);
+
+  if (isLoading || !characterData || !filmsData || !starshipsData)
     return (
       <Oval
         visible={true}
@@ -28,15 +46,16 @@ const CharacterPage = () => {
 
   return (
     <div className="flex flex-col p-10 gap-10 h-full">
-      <div className="relative flex justify-center h-10">
-        <h1 className="text-center text-xl m-auto">Character page</h1>
-        <button
-          className="absolute right-0 px-4 h-full bg-foreground text-background rounded-lg hover:bg-[#383838] dark:hover:bg-[#ccc]"
-          onClick={handleBackClick}
-        >
-          Back to all characters
-        </button>
-      </div>
+      <CharacterPageHeader />
+      <ReactFlow
+        fitView
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes as unknown as NodeTypes}
+        edgesFocusable={false}
+        nodesConnectable={false}
+        className="[&_.react-flow\_\_panel]:hidden"
+      />
     </div>
   );
 };
