@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Character, GetCharactersApiResponseData } from "../types";
+import { GetCharactersApiResponseData } from "../types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useInfiniteCharactersFetch = () => {
@@ -19,16 +19,8 @@ export const useInfiniteCharactersFetch = () => {
     initialPageParam: "/api/people/",
   });
 
-  const charactersData: Character[] = [];
-  data?.pages.forEach((page) => {
-    if (!page) return;
-    page.results.forEach((character) => {
-      charactersData.push(character);
-    });
-  });
-
   return {
-    data: charactersData,
+    data: data?.pages.map((p) => p?.results).flat() || [],
     isLoading: isFetching,
     fetchMore: fetchNextPage,
   };
