@@ -27,7 +27,6 @@ describe("CharactersList", () => {
   beforeEach(async () => {
     await waitFor(() => render(<ListCharacter character={character} />));
   });
-  it("ListCharacter component renders", () => {});
   it("List character has all their characteristics", () => {
     const name = screen.getByText("Obi-Wan Kenobi");
     const height = screen.getByText("182");

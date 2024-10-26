@@ -12,10 +12,10 @@ const CharactersList = () => {
 
   useEffect(() => {
     if (!inView || isLoading) return;
-    fetchMore({ next: data?.next });
+    fetchMore();
   }, [inView, isLoading]);
 
-  if (!data?.results.length && isLoading)
+  if (!data.length && isLoading)
     return (
       <Oval
         visible={true}
@@ -26,13 +26,12 @@ const CharactersList = () => {
         wrapperClass="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       />
     );
-  if (!data?.results.length)
+  if (!data.length)
     return <p className="text-center pt-6 text-xl">No characters found</p>;
-
   return (
     <div className="flex flex-col overflow-auto flex-[1_1_0px] mx-auto w-fit custom-scrollbar ">
-      <div className="w-full grid grid-cols-2 md:grid-cols-3 p-4 gap-4">
-        {data.results.map((character) => (
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 p-4 gap-4">
+        {data.map((character) => (
           <ListCharacter character={character} key={character.id} />
         ))}
       </div>

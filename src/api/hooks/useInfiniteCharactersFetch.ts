@@ -1,44 +1,35 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { GetCharactersApiResponseData } from "../types";
-
-type RequestProps = {
-  next?: string;
-};
+import { Character, GetCharactersApiResponseData } from "../types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useInfiniteCharactersFetch = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [charactersData, setCharactersData] =
-    useState<GetCharactersApiResponseData | null>(null);
+  const { data, fetchNextPage, isFetching } = useInfiniteQuery<
+    GetCharactersApiResponseData | null,
+    Error
+  >({
+    queryKey: ["data"],
+    queryFn: async ({ pageParam }) => {
+      const response = await axios.get<GetCharactersApiResponseData>(
+        `${pageParam}`
+      );
+      return response.data;
+    },
+    getNextPageParam: (data: GetCharactersApiResponseData | null) =>
+      data?.next || null,
+    initialPageParam: "/api/people/",
+  });
 
-  const fetchMore = ({ next }: RequestProps) => {
-    if (charactersData && !charactersData.next) return;
-    setIsLoading(true);
-    axios
-      .get<GetCharactersApiResponseData>(
-        next || `${process.env.NEXT_PUBLIC_API_ENDPOINT}/people/`
-      )
-      .then((res) => {
-        if (!charactersData) {
-          setCharactersData(res.data);
-          return;
-        }
-        setCharactersData({
-          ...res.data,
-          results: [...charactersData.results, ...res.data.results],
-        });
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
-  };
-
-  useEffect(() => {
-    fetchMore({});
-  }, []);
+  const charactersData: Character[] = [];
+  data?.pages.forEach((page) => {
+    if (!page) return;
+    page.results.forEach((character) => {
+      charactersData.push(character);
+    });
+  });
 
   return {
     data: charactersData,
-    isLoading,
-    fetchMore,
+    isLoading: isFetching,
+    fetchMore: fetchNextPage,
   };
 };

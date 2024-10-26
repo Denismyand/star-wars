@@ -1,60 +1,50 @@
-import { useEffect, useState } from "react";
-import {
-  Character,
-  Film,
-  GetFilmsApiResponseData,
-  GetStarshipsApiResponseData,
-  Starship,
-} from "../types";
 import axios from "axios";
+import { skipToken, useQuery } from "@tanstack/react-query";
+import { Character, Film, Starship } from "../types";
 
 export const useGetGraphData = (cid: string) => {
-  const [characterData, setCharacterData] = useState<Character | null>(null);
-  const [starshipsData, setStarshipsData] = useState<Starship[]>([]);
-  const [filmsData, setFilmsData] = useState<Film[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      await axios
-        .get(`/api/people/${cid}`)
-        .then(async (characterResponse: { data: Character }) => {
-          setCharacterData(characterResponse.data);
-          const films = characterResponse?.data.films.join(",") || [];
-          const starships = characterResponse?.data.starships.join(",") || [];
-
-          if (films.length) {
-            await axios
-              .get(`/api/films/?id__in=${films}`)
-              .then((res: { data: GetFilmsApiResponseData }) => {
-                setFilmsData(res.data.results);
-              });
-          }
-
-          if (starships) {
-            await axios
-              .get(`/api/starships/?id__in=${starships}`)
-              .then((res: { data: GetStarshipsApiResponseData }) => {
-                setStarshipsData(res.data.results);
-              });
-          }
-        });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchCharacterData = async () => {
+    const response = await axios.get(`/api/people/${cid}`);
+    return (await response.data) as Character;
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [cid]);
+  const fetchFilmsData = async () => {
+    const response = await axios.get(`/api/films/?id__in=${films}`);
+    return (await response.data.results) as Film[];
+  };
+
+  const fetchStarshipsData = async () => {
+    const response = await axios.get(`/api/starships/?id__in=${starships}`);
+    return response.data.results as Starship[];
+  };
+
+  const { isFetching: isLoadingCharacter, data: characterData } = useQuery({
+    queryKey: ["character", cid],
+    queryFn: fetchCharacterData,
+  });
+
+  const films = characterData?.films.join(",") || "";
+  const starships = characterData?.starships.join(",") || "";
+  const { isFetching: isLoadingFilms, data: filmsData } = useQuery({
+    enabled: !!characterData?.films.length,
+    queryKey: ["films", films],
+    queryFn: !!characterData?.films.length ? () => fetchFilmsData() : skipToken,
+  });
+
+  const { isFetching: isLoadingStarships, data: starshipsData } = useQuery({
+    enabled: !!characterData?.starships.length,
+    queryKey: ["starships", starships],
+    queryFn: !!characterData?.films.length
+      ? () => fetchStarshipsData()
+      : skipToken,
+  });
+
+  const isLoading = isLoadingCharacter || isLoadingFilms || isLoadingStarships;
 
   return {
-    characterData,
-    starshipsData,
-    filmsData,
-    isLoading,
+    characterData: characterData || null,
+    starshipsData: starshipsData || [],
+    filmsData: filmsData || [],
+    isLoading: isLoading,
   };
 };
