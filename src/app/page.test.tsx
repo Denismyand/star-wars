@@ -14,6 +14,16 @@ jest.mock("react-intersection-observer", () => {
 
 jest.mock("axios");
 
+jest.mock("@/api/hooks/useInfiniteCharactersFetch", () => {
+  return {
+    useInfiniteCharactersFetch: () => ({
+      data: mockData,
+      isLoading: false,
+      fetchMore: jest.fn(),
+    }),
+  };
+});
+
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const mockData: GetCharactersApiResponseData = {
