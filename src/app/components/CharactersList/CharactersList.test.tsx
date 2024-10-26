@@ -118,8 +118,8 @@ describe("CharactersList", () => {
 
     render(<CharactersList />);
 
-    expect(screen.getByText("Name: Obi-Wan Kenobi")).toBeInTheDocument();
-    expect(screen.getByText("Name: Wilhuff Tarkin")).toBeInTheDocument();
+    expect(screen.getByText("Obi-Wan Kenobi")).toBeInTheDocument();
+    expect(screen.getByText("Wilhuff Tarkin")).toBeInTheDocument();
   });
 
   it("fetches more characters when inView is true", async () => {

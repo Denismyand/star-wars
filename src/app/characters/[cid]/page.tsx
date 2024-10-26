@@ -6,10 +6,10 @@ import { redirect, useParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
 import "@xyflow/react/dist/style.css";
 
-import { useNodesAndEdges } from "@/utils/useNodesAndEdges";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import CharacterPageHeader from "./components/CharacterPageHeader/CharacterPageHeader";
 import CustomNode from "./components/CustomNode/CustomNode";
+import { generateNodesAndEdges } from "@/utils/generateNodesAndEdges";
 
 const nodeTypes = {
   customNode: CustomNode,
@@ -20,12 +20,16 @@ const CharacterPage = () => {
   const { characterData, filmsData, starshipsData, isLoading } =
     useGetGraphData(cid as string);
 
-  const { nodes, edges } = useNodesAndEdges({
-    characterData,
-    filmsData,
-    starshipsData,
-    isLoading,
-  });
+  const { nodes, edges } = useMemo(
+    () =>
+      generateNodesAndEdges({
+        characterData,
+        filmsData,
+        starshipsData,
+        isLoading,
+      }),
+    [characterData, filmsData, starshipsData, isLoading]
+  );
 
   useEffect(() => {
     if (isLoading || characterData) return;

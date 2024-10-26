@@ -30,8 +30,8 @@ const CharactersList = () => {
     return <p className="text-center pt-6 text-xl">No characters found</p>;
 
   return (
-    <div className="flex flex-col overflow-auto flex-[1_1_0px] h-fit custom-scrollbar">
-      <div className="w-full grid grid-cols-3 p-4 gap-4">
+    <div className="flex flex-col overflow-auto flex-[1_1_0px] mx-auto w-fit custom-scrollbar ">
+      <div className="w-full grid grid-cols-2 md:grid-cols-3 p-4 gap-4">
         {data.results.map((character) => (
           <ListCharacter character={character} key={character.id} />
         ))}

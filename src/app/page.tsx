@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 const MainPage = () => {
   return (
-    <div className="flex flex-col p-10 gap-10 h-full">
-      <h1 className="text-center text-xl">Characters list</h1>
+    <div className="flex flex-col p-8 gap-8 h-full">
+      <h1 className="text-center text-2xl font-bold">Characters list</h1>
       <CharactersList />
     </div>
   );
