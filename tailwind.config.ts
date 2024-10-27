@@ -19,26 +19,5 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      const scrollbars = {
-        ".custom-scrollbar": {
-          "&::-webkit-scrollbar": {
-            width: "8px",
-            height: "8px",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "transparent",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "var(--foreground)",
-            borderRadius: "8px",
-          },
-        },
-      };
-
-      addUtilities(scrollbars);
-    },
-  ],
 };
 export default config;

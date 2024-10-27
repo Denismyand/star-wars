@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useInfiniteCharactersFetch = () => {
   const { data, fetchNextPage, isFetching } = useInfiniteQuery<
-    GetCharactersApiResponseData | null,
+    GetCharactersApiResponseData,
     Error
   >({
     queryKey: ["data"],
@@ -20,7 +20,7 @@ export const useInfiniteCharactersFetch = () => {
   });
 
   return {
-    data: data?.pages.map((p) => p?.results).flat() || [],
+    data: data?.pages.map((p) => p.results).flat() || [],
     isLoading: isFetching,
     fetchMore: fetchNextPage,
   };
